@@ -4,6 +4,8 @@ import com.glisco.isometricrenders.mixin.access.BlockEntityAccessor;
 import com.glisco.isometricrenders.property.DefaultPropertyBundle;
 import com.glisco.isometricrenders.util.ExportPathSpec;
 import com.glisco.isometricrenders.util.ParticleRestriction;
+import com.mojang.blaze3d.buffers.Std140Builder;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
@@ -21,6 +23,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.lwjgl.system.MemoryStack;
+
+import java.nio.ByteBuffer;
 
 public class BlockStateRenderable extends DefaultRenderable<DefaultPropertyBundle> implements TickingRenderable<DefaultPropertyBundle> {
 
@@ -58,6 +65,22 @@ public class BlockStateRenderable extends DefaultRenderable<DefaultPropertyBundl
                 : null;
 
         return of(state, data);
+    }
+
+    private static final Vector3f DEFAULT_DIFFUSION_LIGHT_0 = new Vector3f(0.2F, 1.0F, -0.7F).normalize();
+    private static final Vector3f DEFAULT_DIFFUSION_LIGHT_1 = new Vector3f(-0.2F, 1.0F, 0.7F).normalize();
+
+    @Override
+    public void setupLighting(Matrix4f modelViewMatrix) {
+        try (MemoryStack memoryStack = MemoryStack.stackPush()) {
+            ByteBuffer byteBuffer = Std140Builder.onStack(memoryStack, uboSize)
+                    .putVec3(DEFAULT_DIFFUSION_LIGHT_0)
+                    .putVec3(DEFAULT_DIFFUSION_LIGHT_1)
+                    .get();
+            RenderSystem.getDevice().createCommandEncoder().writeToBuffer(buffer.slice(), byteBuffer);
+        }
+
+        RenderSystem.setShaderLights(buffer.slice());
     }
 
     @Override
