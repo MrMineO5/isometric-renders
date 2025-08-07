@@ -17,6 +17,8 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
+import net.minecraft.storage.NbtWriteView;
+import net.minecraft.util.ErrorReporter;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.mutable.MutableObject;
@@ -52,11 +54,11 @@ public class EntityRenderable extends DefaultRenderable<DefaultPropertyBundle> i
     public static EntityRenderable copyOf(Entity source) {
         final var client = MinecraftClient.getInstance();
 
-        var nbt = new NbtCompound();
-        source.writeNbt(nbt);
+        var nbt = NbtWriteView.create(ErrorReporter.EMPTY);
+        source.writeData(nbt);
         nbt.putString("id", source.getType().getRegistryEntry().registryKey().getValue().toString());
 
-        final var entity = EntityType.loadEntityWithPassengers(nbt, client.world, SpawnReason.LOAD, Function.identity());
+        final var entity = EntityType.loadEntityWithPassengers(nbt.getNbt(), client.world, SpawnReason.LOAD, Function.identity());
         applyToEntityAndPassengers(entity, Entity::tick);
 
         return new EntityRenderable(entity);
@@ -76,11 +78,11 @@ public class EntityRenderable extends DefaultRenderable<DefaultPropertyBundle> i
 
         var properties = this.properties();
         this.entity.setHeadYaw(properties.yaw.get());
-        if (entity instanceof LivingEntity living) living.prevHeadYaw = properties.yaw.get();
-        this.entity.prevYaw = properties.yaw.get();
+        if (entity instanceof LivingEntity living) living.lastHeadYaw = properties.yaw.get();
+        this.entity.lastYaw = properties.yaw.get();
 
         this.entity.setPitch(properties.pitch.get());
-        this.entity.prevPitch = properties.pitch.get();
+        this.entity.lastPitch = properties.pitch.get();
 
         final MutableObject<Vec3d> offset = new MutableObject<>(Vec3d.ZERO);
 

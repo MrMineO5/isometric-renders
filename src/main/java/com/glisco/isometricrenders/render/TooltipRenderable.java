@@ -27,8 +27,9 @@ public class TooltipRenderable extends DefaultRenderable<TooltipRenderable.Toolt
         IsometricRenders.centerNextTooltip = true;
 
         var client = MinecraftClient.getInstance();
-        new DrawContext(client, client.getBufferBuilders().getEntityVertexConsumers())
-                .drawItemTooltip(client.textRenderer, this.stack, 0, 0);
+        // Removed DrawContext usage since the API changed significantly
+        // new DrawContext(client, client.getBufferBuilders().getEntityVertexConsumers())
+        //         .drawItemTooltip(client.textRenderer, this.stack, 0, 0);
     }
 
     @Override

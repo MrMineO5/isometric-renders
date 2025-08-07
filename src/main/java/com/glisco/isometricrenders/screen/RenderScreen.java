@@ -13,6 +13,7 @@ import com.glisco.isometricrenders.render.TickingRenderable;
 import com.glisco.isometricrenders.util.*;
 import com.glisco.isometricrenders.widget.IOStateComponent;
 import com.glisco.isometricrenders.widget.NotificationComponent;
+import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.wispforest.owo.ui.base.BaseOwoScreen;
 import io.wispforest.owo.ui.component.Components;
@@ -329,10 +330,10 @@ public class RenderScreen extends BaseOwoScreen<FlowLayout> {
             this.renderInGameBackground(context);
         }
 
-        context.draw();
+//        context.draw();
 
         final var window = client.getWindow();
-        final var effectiveTickDelta = playAnimations.get() ? client.getRenderTickCounter().getTickDelta(false) : 0;
+        final var effectiveTickDelta = playAnimations.get() ? client.getRenderTickCounter().getDynamicDeltaTicks() : 0;
         RenderableDispatcher.drawIntoActiveFramebuffer(
             this.renderable,
             window.getFramebufferWidth() / (float) window.getFramebufferHeight(),
@@ -343,7 +344,7 @@ public class RenderScreen extends BaseOwoScreen<FlowLayout> {
         );
 
         if (!this.drawOnlyBackground && this.uiAdapter != null) {
-            RenderSystem.clear(GL11.GL_DEPTH_BUFFER_BIT);
+            GlStateManager._clear(GL11.GL_DEPTH_BUFFER_BIT);
 
             drawFramingHint(context);
             drawGuiBackground(context);

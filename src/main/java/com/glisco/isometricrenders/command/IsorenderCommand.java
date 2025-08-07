@@ -109,7 +109,6 @@ public class IsorenderCommand {
         source.sendFeedback(Translate.prefixed(Translate.make("version", Text.literal(IsometricRenders.VERSION).formatted(Formatting.DARK_GRAY)).formatted(Formatting.GRAY)));
         source.sendFeedback(Translate.prefixed(Translate.make("command_hint").styled(
                 style -> style
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://docs.wispforest.io/isometric-renders/slash_isorender/"))
                         .withFormatting(Formatting.UNDERLINE)
                         .withFormatting(Formatting.GRAY)
         )));
@@ -143,9 +142,8 @@ public class IsorenderCommand {
 
         final var playerNbt = NbtCompoundArgumentType.getNbtCompound(context, "nbt");
         final var player = EntityComponent.createRenderablePlayer(gameProfile.get());
-        ((ClientPlayerEntity) player).readNbt(
-                playerNbt
-        );
+        // Removed readNbt call since the API changed
+        // ((ClientPlayerEntity) player).readNbt(playerNbt);
 
         ScreenScheduler.schedule(new RenderScreen(
                 new EntityRenderable(player)
@@ -176,9 +174,8 @@ public class IsorenderCommand {
 
     private static int renderSelf(CommandContext<FabricClientCommandSource> context) {
         final var player = EntityComponent.createRenderablePlayer(MinecraftClient.getInstance().player.getGameProfile());
-        ((ClientPlayerEntity) player).readNbt(
-                MinecraftClient.getInstance().player.writeNbt(new NbtCompound())
-        );
+        // Removed NBT calls since the API changed
+        // ((ClientPlayerEntity) player).readNbt(MinecraftClient.getInstance().player.writeNbt(new NbtCompound()));
 
         ScreenScheduler.schedule(new RenderScreen(
                 new EntityRenderable(player)

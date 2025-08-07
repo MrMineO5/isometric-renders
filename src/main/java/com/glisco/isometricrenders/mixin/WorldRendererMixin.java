@@ -26,7 +26,7 @@ public class WorldRendererMixin {
     }
 
     @Inject(method = "method_62214", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;renderTargetBlockOutline(Lnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;Lnet/minecraft/client/util/math/MatrixStack;Z)V"))
-    public void drawAreaSelection(Fog fog, RenderTickCounter renderTickCounter, Camera camera, Profiler profiler, Matrix4f matrix4f, Matrix4f matrix4f2, Handle<?> handle, Handle<?> handle2, Handle<?> handle3, Handle<?> handle4, boolean bl, Frustum frustum, Handle<?> handle5, CallbackInfo ci, @Local(ordinal = 0) MatrixStack matrices) {
+    public void drawAreaSelection(RenderTickCounter renderTickCounter, Camera camera, Profiler profiler, Matrix4f matrix4f, Matrix4f matrix4f2, Handle<?> handle, Handle<?> handle2, Handle<?> handle3, Handle<?> handle4, boolean bl, Frustum frustum, Handle<?> handle5, CallbackInfo ci, @Local(ordinal = 0) MatrixStack matrices) {
         AreaSelectionHelper.renderSelectionBox(matrices, camera);
     }
 }

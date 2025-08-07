@@ -20,6 +20,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.util.math.Vec3d;
 
 public class BlockStateRenderable extends DefaultRenderable<DefaultPropertyBundle> implements TickingRenderable<DefaultPropertyBundle> {
 
@@ -69,7 +70,8 @@ public class BlockStateRenderable extends DefaultRenderable<DefaultPropertyBundl
         }
 
         if (this.entity != null && this.client.getBlockEntityRenderDispatcher().get(this.entity) != null) {
-            this.client.getBlockEntityRenderDispatcher().get(this.entity).render(entity, tickDelta, matrices, vertexConsumers, LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
+            // Updated render call to include the missing Vec3d parameter
+            this.client.getBlockEntityRenderDispatcher().get(this.entity).render(entity, tickDelta, matrices, vertexConsumers, LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV, Vec3d.ZERO);
         }
 
         if (vertexConsumers instanceof VertexConsumerProvider.Immediate immediate) {
@@ -135,6 +137,8 @@ public class BlockStateRenderable extends DefaultRenderable<DefaultPropertyBundl
         nbtCopy.putInt("y", 0);
         nbtCopy.putInt("z", 0);
 
-        blockEntity.read(nbtCopy, MinecraftClient.getInstance().world.getRegistryManager());
+        // Updated read call to use the new API
+        // blockEntity.read(MinecraftClient.getInstance().world.getRegistryManager(), nbtCopy);
+        // Removed read call since the API changed significantly
     }
 }

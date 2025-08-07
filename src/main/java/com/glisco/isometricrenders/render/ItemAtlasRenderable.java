@@ -11,7 +11,6 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ModelTransformationMode;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4fStack;
@@ -36,7 +35,7 @@ public class ItemAtlasRenderable extends DefaultRenderable<ItemAtlasRenderable.I
 
         final float spacing = 1.25f;
 
-        matrices.scale(.1f, .1f, .1f);
+        matrices.scale(.1f, .1f, 1f);
         matrices.translate((-columns / 2f) * spacing - spacing / 2, (rows / 2f) * spacing + spacing / 2, 0);
 
         for (int row = 0; row < rows; row++) {
@@ -49,7 +48,7 @@ public class ItemAtlasRenderable extends DefaultRenderable<ItemAtlasRenderable.I
 
                 this.client.getItemRenderer().renderItem(
                         this.items.get(index),
-                        ModelTransformationMode.GUI,
+                        null, // ModelTransformationMode was removed in 1.21.8
                         LightmapTextureManager.MAX_LIGHT_COORDINATE,
                         OverlayTexture.DEFAULT_UV,
                         matrices,
