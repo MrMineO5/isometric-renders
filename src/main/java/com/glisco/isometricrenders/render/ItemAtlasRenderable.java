@@ -10,6 +10,7 @@ import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemDisplayContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
@@ -48,7 +49,7 @@ public class ItemAtlasRenderable extends DefaultRenderable<ItemAtlasRenderable.I
 
                 this.client.getItemRenderer().renderItem(
                         this.items.get(index),
-                        null, // ModelTransformationMode was removed in 1.21.8
+                        ItemDisplayContext.GUI,
                         LightmapTextureManager.MAX_LIGHT_COORDINATE,
                         OverlayTexture.DEFAULT_UV,
                         matrices,
