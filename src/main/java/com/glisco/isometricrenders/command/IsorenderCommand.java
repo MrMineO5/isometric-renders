@@ -23,6 +23,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
@@ -326,6 +327,8 @@ public class IsorenderCommand {
     }
 
     private static <S> void withItemGroupFromContext(CommandContext<S> context, BiConsumer<List<ItemStack>, String> action) {
+        ItemGroups.updateDisplayContext(MinecraftClient.getInstance().getNetworkHandler().getEnabledFeatures(), true, MinecraftClient.getInstance().player.getWorld().getRegistryManager());
+
         final var itemGroup = ItemGroupArgumentType.getItemGroup("itemgroup", context);
         final var stacks = new ArrayList<>(itemGroup.getDisplayStacks());
         action.accept(stacks, "creative-tab_" + Registries.ITEM_GROUP.getId(itemGroup).toShortTranslationKey());
